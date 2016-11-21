@@ -61,18 +61,13 @@ class Enqueue {
             }
         }
 
-//        if (substr($attrs['src'], 0, 2) !== "//")
-//        {
-//            $attrs['src'] = ltrim($attrs['src'], '/');
-//        }
-
         if (pathinfo($attrs['src'], PATHINFO_EXTENSION) === 'css')
         {
-            wp_enqueue_style($attrs['as'], $attrs['src']);
+            wp_enqueue_style($attrs['as'], $attrs['src'], (array) array_get($attrs, 'deps', []), (array) array_get($attrs, 'ver', null), (array) array_get($attrs, 'dep', 'all'));
         }
         else
         {
-            wp_enqueue_script($attrs['as'], $attrs['src'], [], false, $footer);
+            wp_enqueue_script($attrs['as'], $attrs['src'], (array) array_get($attrs, 'deps', []), (array) array_get($attrs, 'ver', null), $footer);
 
             if(isset($attrs['localize'])) {
                 wp_localize_script( $attrs['as'], $attrs['as'], $attrs['localize'] );
