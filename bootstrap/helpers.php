@@ -181,10 +181,34 @@ if ( ! function_exists('view'))
      * @param  array  $context
      * @return string
      */
-    function view($name, $context = [])
-    {
-        return response(herbert('Twig_Environment')->render($name, $context));
-    }
+     function view($name, $context = []) {
+       $path = explode('/', $name);
+       $file_ext = explode('.', end($path));
+       $file_ext = end($file_ext);
+       if($file_ext == 'php') {
+           $config_dir = __DIR__ . '/herbert.config.php';
+           $config = include($config_dir);
+
+           $path = explode('/', $name);
+           if(isset($path[0]) && substr($path[0],0,1) == '@') {
+               $view_key = str_replace('@', '', $path[0]);
+               if(!isset($config['views'][$view_key])) {
+                   die("Missing path var @{$view_key} in config file = {$config_dir} [Reported @" . __FILE__ . "]");
+               }
+               $path[0] = $config['views'][$view_key];
+           }
+           $name = implode('/', $path);
+           if(!file_exists($name)) {
+               die("Missing view file {$name} [Reported @" . __FILE__ . "]");
+           }
+           extract($context); // lets expose the vars to the include. so all keys become vars.
+           ob_start();
+               include($name);
+           return ob_get_clean();
+       } else {
+           return response(herbert('Twig_Environment')->render($name, $context));
+       }
+   }
 }
 
 if ( ! function_exists('panel_url'))
