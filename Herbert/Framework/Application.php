@@ -14,7 +14,7 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     /**
      * The application's version.
      */
-    const VERSION = '0.9.13';
+    const VERSION = '0.9.16';
 
     /**
      * The application's version.
@@ -1272,6 +1272,16 @@ class Application extends \Illuminate\Container\Container implements \Illuminate
     public function getCachedServicesPath()
     {
         return $this->basePath() . '/vendor/services.json';
+    }
+
+    public function runningInConsole()
+    {
+    }
+    public function runningUnitTests()
+    {
+    }
+    public function getCachedPackagesPath()
+    {
     }
 
 }

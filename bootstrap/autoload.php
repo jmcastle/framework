@@ -69,8 +69,9 @@ foreach ($iterator as $directory)
 
     // Ugly hack to make the install hook work correctly
     // as WP doesn't allow closures to be passed here
-    register_uninstall_hook($plugin, create_function('', 'herbert()->deletePlugin(\'' . $root . '\');'));
-
+    //register_uninstall_hook($plugin, create_function('', 'herbert()->deletePlugin(\'' . $root . '\');'));
+    //Temorary disable this hook, for 7.2
+    
     if ( ! is_plugin_active($plugin))
     {
         continue;
